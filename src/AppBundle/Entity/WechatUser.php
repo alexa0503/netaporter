@@ -43,6 +43,10 @@ class WechatUser
      */
     protected $country;
     /**
+     * @ORM\Column(name="birth_date",type="date", nullable=true)
+     */
+    protected $birthDate = null;
+    /**
      * @ORM\Column(name="create_time",type="datetime")
      */
     protected $createTime;
@@ -51,20 +55,10 @@ class WechatUser
      */
     protected $createIp;
     /**
-     * @ORM\OneToOne(targetEntity="Timeline", mappedBy="user")
-     */
-    protected $timeline;
-    /**
-     * @ORM\OneToMany(targetEntity="VoteLog", mappedBy="voter")
-     */
-    protected $voteLogs;
-    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->logs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->voteLogs = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -287,91 +281,25 @@ class WechatUser
     }
 
     /**
-     * Set timeline
+     * Set birthDate
      *
-     * @param \AppBundle\Entity\Timeline $timeline
+     * @param \DateTime $birthDate
      * @return WechatUser
      */
-    public function setTimeline(\AppBundle\Entity\Timeline $timeline = null)
+    public function setBirthDate($birthDate)
     {
-        $this->timeline = $timeline;
+        $this->birthDate = $birthDate;
 
         return $this;
     }
 
     /**
-     * Get timeline
+     * Get birthDate
      *
-     * @return \AppBundle\Entity\Timeline 
+     * @return \DateTime 
      */
-    public function getTimeline()
+    public function getBirthDate()
     {
-        return $this->timeline;
-    }
-
-    /**
-     * Add logs
-     *
-     * @param \AppBundle\Entity\VoteLog $logs
-     * @return WechatUser
-     */
-    public function addLog(\AppBundle\Entity\VoteLog $logs)
-    {
-        $this->logs[] = $logs;
-
-        return $this;
-    }
-
-    /**
-     * Remove logs
-     *
-     * @param \AppBundle\Entity\VoteLog $logs
-     */
-    public function removeLog(\AppBundle\Entity\VoteLog $logs)
-    {
-        $this->logs->removeElement($logs);
-    }
-
-    /**
-     * Get logs
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getLogs()
-    {
-        return $this->logs;
-    }
-
-    /**
-     * Add voteLogs
-     *
-     * @param \AppBundle\Entity\VoteLog $voteLogs
-     * @return WechatUser
-     */
-    public function addVoteLog(\AppBundle\Entity\VoteLog $voteLogs)
-    {
-        $this->voteLogs[] = $voteLogs;
-
-        return $this;
-    }
-
-    /**
-     * Remove voteLogs
-     *
-     * @param \AppBundle\Entity\VoteLog $voteLogs
-     */
-    public function removeVoteLog(\AppBundle\Entity\VoteLog $voteLogs)
-    {
-        $this->voteLogs->removeElement($voteLogs);
-    }
-
-    /**
-     * Get voteLogs
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getVoteLogs()
-    {
-        return $this->voteLogs;
+        return $this->birthDate;
     }
 }

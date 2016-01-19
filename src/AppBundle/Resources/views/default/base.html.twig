@@ -31,6 +31,7 @@
     <script src="{{ asset('bundles/app/default/') }}js/jquery.touchSwipe.min.js"></script>
     <script src="{{ asset('bundles/app/default/') }}js/common.js"></script>
 {% endblock %}
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
     var wxData = {
               appId: '{{ app.session.get("wx_app_id") }}',
@@ -40,7 +41,7 @@
               title: '{{ app.session.get("wechat_title") }}',
               desc: '{{ app.session.get("wechat_desc") }}',
               shareUrl: '{{ app.session.get("wx_share_url") }}',
-              imgUrl: 'http://{{ app.request.host }}/{{ app.session.get("wechat_img_url") }}',
+              imgUrl: '{{ app.session.get("wechat_img_url") }}',
     };
     function wxShare(data){
       wx.config({
@@ -63,6 +64,7 @@
           trigger: function (res) {
           },
           success: function (res) {
+            goPage5();
           },
           cancel: function (res) {
           },
@@ -77,6 +79,7 @@
           trigger: function (res) {
           },
           success: function (res) {
+            goPage5();
           },
           cancel: function (res) {
           },

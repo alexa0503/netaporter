@@ -79,6 +79,7 @@ class Wechat {
         if ($data->expire_time < time()) {
             // 如果是企业号用以下URL获取access_token
             $url = "https://app.jingsocial.com/api/wechat/accessToken?appid=$this->appId&secret=$this->appSecret";
+            //var_dump($this->httpGet($url));
             //$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$this->appId&secret=$this->appSecret";
             $res = json_decode($this->httpGet($url));
             $access_token = $res->access_token;

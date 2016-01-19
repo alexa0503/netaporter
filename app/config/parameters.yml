@@ -13,7 +13,7 @@ parameters:
     locale: cn
     secret: 428768047eb58411a2354f84b7ec6ece
     wechat_appid: wxea1e0d84d22f3976
-    wechat_secret: ''
-    app.wechat_title: ''
-    app.wechat_desc: ''
-    app.wechat_img_url: ''
+    wechat_secret: 428768047eb58411a2354f84b7ec6ece
+    wechat_title: ''
+    wechat_desc: ''
+    wechat_img_url: 'images/share.jpg'

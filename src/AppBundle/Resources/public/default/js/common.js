@@ -24,7 +24,7 @@ $(document).ready(function(){
 	$('.h832').css('padding-top',+(wHeight-832)/2+'px');
 	
 	var images=[];
-    images.push("images/bgImg1.png");
+  images.push("images/bgImg1.png");
 	images.push("images/bgImg2a.png");
 	images.push("images/bgImg2b.png");
 	images.push("images/bgImg3a.png");
@@ -94,6 +94,8 @@ function goPage3(){
 				$('.page2').removeClass('downHide').hide();
 				},1000);
 			}
+			var birthDate = bYear+'-'+bMonth+'-'+bDay;
+			$.post('/update',{birthDate:birthDate},function(){});
 	}
 
 function page3Act(){

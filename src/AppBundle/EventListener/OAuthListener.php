@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\Httpkernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-//use AppBundle\Wechat;
+use AppBundle\Wechat;
 
 class OAuthListener
 {
@@ -53,18 +53,20 @@ class OAuthListener
 				//$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$app_id."&redirect_uri=".$callback_url."&response_type=code&scope=snsapi_userinfo&state=$state#wechat_redirect";
 				$event->setResponse(new RedirectResponse($url));
 			}
-			$appId = $this->container->getParameter('wechat_appid');
-			$appSecret = $this->container->getParameter('wechat_secret');
-			$wechat = new Wechat\Wechat($appId, $appSecret);
-			$wx = (Object)$wechat->getSignPackage();
-			$session->set('wechat_title', $this->container->getParameter('wechat_title'));
-			$session->set('wechat_desc', $this->container->getParameter('wechat_desc'));
-			$session->set('wechat_img_url', 'http://'.$request->getHost().$this->container->getParameter('wechat_img_url'));
-			$session->set('wx_share_url', $request->getUriForPath('/'));
-			$session->set('wx_app_id', $wx->appId);
-			$session->set('wx_timestamp', $wx->timestamp);
-			$session->set('wx_nonce_str', $wx->nonceStr);
-			$session->set('wx_signature', $wx->signature);
+			else{
+				$appId = $this->container->getParameter('wechat_appid');
+				$appSecret = $this->container->getParameter('wechat_secret');
+				$wechat = new Wechat\Wechat($appId, $appSecret);
+				$wx = (Object)$wechat->getSignPackage();
+				//$session->set('wechat_title', $this->container->getParameter('wechat_title'));
+				//$session->set('wechat_desc', $this->container->getParameter('wechat_desc'));
+				$session->set('wechat_img_url', 'http://'.$request->getHost().$this->container->getParameter('wechat_img_url'));
+				$session->set('wx_share_url', $request->getUriForPath('/'));
+				$session->set('wx_app_id', $wx->appId);
+				$session->set('wx_timestamp', $wx->timestamp);
+				$session->set('wx_nonce_str', $wx->nonceStr);
+				$session->set('wx_signature', $wx->signature);
+			}
 		}
 		
 	}
