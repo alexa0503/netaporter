@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>好时新意，分享甜蜜</title>
+<style>
+body{margin:0px;
+	color: #D70010;
+	background-color: #D70010;
+	overflow:hidden;}
+.none{ display:none;}
+
+.u-audio span{ display:block;width:50px; height:53px; position:absolute; left:0; top:0;}
+.audio_open{ background:rgba(0, 0, 0, 0) url("bundles/app/default/images/music_play.png") repeat scroll 0 0;}
+.audio_close{ background:rgba(0, 0, 0, 0) url("bundles/app/default/images/music_stop.png") repeat scroll 0 0;}
+.u-audio { position:absolute; top:15px; right:20px; z-index:99; width:50px; height:53px; text-align:center; overflow: hidden; margin:0; padding:0; }
+</style>
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="src/minified/TweenMax.min.js"></script>
+<script src="src/minified/easing/EasePack.min.js"></script>
+<script src="libs/easeljs-0.8.1.min.js"></script>
+<script src="libs/tweenjs-0.6.1.min.js"></script>
+<script src="libs/movieclip-0.8.1.min.js"></script>
+<script src="libs/preloadjs-0.6.1.min.js"></script>
+<script src="s0.js"></script>
+<script src="s1.js"></script>
+   <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="http://wx.ompchina.net/resources/Scripts/weixinjssdk.js"></script>
+    <script type="text/javascript">
+    DATAForWeixin.debug = false; // 可设置为 true 以调试
+    DATAForWeixin.appId = 'wx3db5a35f935db51d',//账号的appid
+    DATAForWeixin.openid = '',
+    DATAForWeixin.sharecampaign = ' ',//campaign名称
+
+    /* 请修改以下文字和图片，定制分享文案 */
+    DATAForWeixin.setTimeLine({
+        title: '你有一个来自好时的现金红包未领取',
+        imgUrl: 'http://2015hersheycny.ompchina.net/bundles/app/default/images/share.jpg',
+        link: 'http://2015hersheycny.ompchina.net/'
+        //success:function(){ga('send','event','button','click','朋友圈分享成功',1001)}
+    });
+    DATAForWeixin.setAppMessage({
+        title: '好时新意，分享甜蜜',
+        imgUrl: 'http://2015hersheycny.ompchina.net/bundles/app/default/images/share.jpg',
+        desc: '你有一个来自好时的现金红包未领取',
+        link: 'http://2015hersheycny.ompchina.net/'
+        //success:function(){ga('send','event','button','click','好友分享成功',1002)}
+    });
+    DATAForWeixin.setQQ({
+        title: ' ',
+        imgUrl: '',
+        desc: ' ',
+        link: ''
+      });
+
+    </script>
+</head>
+
+<body>
+	<canvas id="canv" width="640" height="1040" style="background-color:#D70010; position:absolute;"></canvas>
+	<audio id="music" autoplay loop preload="auto"
+            src="bundles/app/default/music.wav">
+      你的浏览器不支持audio标签
+</audio>
+
+
+<div  class="u-audio">
+            <span class="audio_open" ></span>
+            <span class="audio_close" style="display:none;"></span>
+ </div>
+</body>
+<script>
+$(".audio_open").bind('touchstart',function(){
+	closemuisc()
+	})
+
+$(".audio_close").bind('touchstart',function(){
+	openmusic()
+	})
+
+
+function closemuisc(){
+		$('.audio_open').css('display','none');
+		$('.audio_close').css('display','block');
+		document.getElementById('music').pause();
+	}
+function openmusic(){
+		$('.audio_close').css('display','none');
+		$('.audio_open').css('display','block');
+		document.getElementById('music').play();
+	}	
+
+var canvas,stage,ld,exportRoot=[],ldMc,S=this
+var ldPage=0,onPage=1,totalPage=2;
+
+
+function resizeF()
+{
+	var hh=$(window).height()
+	$("#canv").css("top",(hh-1040)*.5)
+	//$("#qr").css("top",(hh-430)*.5)
+}
+
+function inIt()
+{
+	$(window).resize(resizeF);
+	resizeF()	
+	//
+	
+	//		
+	canvas = document.getElementById("canv");
+	//
+	ld = new createjs.LoadQueue(false);
+	ld.installPlugin(createjs.Sound);
+	ld.addEventListener("fileload", loaded);
+	ld.addEventListener("complete", loadComplete);
+	//
+	stage = new createjs.Stage(canvas);
+	createjs.Touch.enable(stage);
+	createjs.Ticker.setFPS(18);
+	createjs.Ticker.addEventListener("tick", stage);
+	//
+	/*$("#canv").on("touchstart",function(e)
+	{
+		onPage=2
+	})*/
+}
+
+function loadPage()
+{
+	console.log(ldPage)
+	if(S["lib"+ldPage].properties.manifest.length>0)
+	{
+		$["img"+ldPage] = $["img"+ldPage]||{};
+		ld.loadManifest(S["lib"+ldPage].properties.manifest);
+	}
+	else
+	{
+		loadComplete()
+	}
+}
+//
+function loaded(e)
+{
+	if (e.item.type == "image") { S["img"+ldPage][e.item.id] = e.result; }
+	//lding
+	if(ldPage==onPage)
+	{
+		stage.addChild(ldMc);
+		var _per=Math.floor((ld._numItemsLoaded/ld._numItems)*100);
+		//ldMc.gotoAndStop(_per);
+		ldMc.txt.text=_per+"%";
+	}
+}
+function loadComplete()
+{
+	exportRoot[ldPage] = new S["lib"+ldPage]["s"+ldPage]();//s+ldPage是fla名字
+	if(ldPage==0){ ldMc=exportRoot[0].ldMc;}
+	if(ldPage==onPage){stage.removeChild(ldMc)}
+	onPage==ldPage?showScene(ldPage):null
+	if(ldPage<totalPage-1)
+	{	
+		ldPage++;
+		loadPage(ldPage);
+	}
+	else
+	{	
+		ld.removeEventListener("fileload", loaded);
+		ld.removeEventListener("complete", loadComplete);
+		ld=null;
+		console.log("Load finish!")	
+	}
+}
+function nextScene()
+{
+	removeScene(onPage)
+	onPage++;
+	if(ldPage>=onPage)
+	{
+		showScene(onPage)
+	}			
+}
+
+function showScene(_page)
+{
+	stage.addChild(exportRoot[_page])
+	exportRoot[_page].gotoAndStop(1)
+}
+function removeScene(_page)
+{
+	stage.removeChild(exportRoot[_page])
+}
+
+function playSound(id, loop) {
+	createjs.Sound.play(id, createjs.Sound.INTERRUPT_EARLY, 0, 0, loop);
+}
+function stopSound(id)
+{
+	createjs.Sound.stop(id);
+}
+
+$(document).ready(inIt);
+window.onload=function()
+{
+	loadPage(0)
+}
+</script>
+<script language="javascript">
+	document.write('<meta name="viewport" content="width=640, minimum-scale = '+window.screen.width/640+', maximum-scale = '+window.screen.width/640+', target-densitydpi=device-dpi">');
+</script>
+<script language="javascript">
+var _gaq = _gaq || [];_gaq.push(['_setAccount', 'UA-62614430-2']);_gaq.push(['_trackPageview']);
+function ggTrack(pStr) {try {var pageTracker = _gat._getTracker('UA-62614430-2');pageTracker._trackPageview("/" + pStr);} catch (e) { }}
+
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</html>
